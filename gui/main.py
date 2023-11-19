@@ -320,7 +320,7 @@ def show_initial_message():
     chat_log.config(state=tk.NORMAL)
     chat_log.insert(tk.END, welcome_message + "\n")
     chat_log.config(state=tk.DISABLED)
-    user_input.focus_set()  # Move o foco para a entrada do usuário
+    user_input.focus_set() 
 
     def handle_user_input(event):
         user_input.config(state=tk.DISABLED)
@@ -375,7 +375,7 @@ def send_message(event=None):
                 )
             else:
                 chat_log.insert(tk.END, "Bot: Não há filmes disponíveis no momento.\n")
-        elif "nao" in message.lower():
+        elif "não" in message.lower():
             chat_log.insert(
                 tk.END,
                 "Bot: Obrigado, aconselho a realizar a sua reserva antes que esgote.\n",
