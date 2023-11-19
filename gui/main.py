@@ -37,37 +37,13 @@ def open_login_page():
             update_username(username)
             toggle_reserve_button(True)
 
-            buttons_frame = tk.Frame(root)
-            buttons_frame.pack()
-
-            add_movie_button = tk.Button(
-                buttons_frame,
-                text="Adicionar Filme",
-                command=add_movie,
-                font=("Arial", 14),
-                fg="black",
-                padx=10,
-                pady=5,
-            )
-            add_movie_button.pack(side=tk.LEFT, padx=5)
-
-            delete_movie_button = tk.Button(
-                buttons_frame,
-                text="Apagar Filme",
-                command=delete_movie,
-                font=("Arial", 14),
-                fg="black",
-                padx=10,
-                pady=5,
-            )
-            delete_movie_button.pack(side=tk.LEFT, padx=5)
             add_logout_button()
         else:
             messagebox.showinfo("Error", response.json()["message"])
 
     def open_create_user_page():
         create_user_window = tk.Toplevel(login_window)
-        create_user_window.title("Criar utilizado", font=("Helvetica", 24), pady=20)
+        create_user_window.title("Criar utilizado")
 
         # Labels e Entries para criar usuário
         tk.Label(create_user_window, text="Novo Username:").pack()
@@ -336,8 +312,11 @@ def toggle_reserve_button(show):
 def on_window_open():
     get_movies()
 
+
 def show_initial_message():
-    welcome_message = "Bem-vindo à sua plataforma de reservas. Precisa de ajuda? Digite 'Ajuda'."
+    welcome_message = (
+        "Bem-vindo à sua plataforma de reservas. Precisa de ajuda? Digite 'Ajuda'."
+    )
     chat_log.config(state=tk.NORMAL)
     chat_log.insert(tk.END, welcome_message + "\n")
     chat_log.config(state=tk.DISABLED)
@@ -350,27 +329,33 @@ def show_initial_message():
             show_help_message()
         else:
             chat_log.config(state=tk.NORMAL)
-            chat_log.insert(tk.END, "Comando não reconhecido. Digite 'Ajuda' para obter assistência.\n")
+            chat_log.insert(
+                tk.END,
+                "Comando não reconhecido. Digite 'Ajuda' para obter assistência.\n",
+            )
             chat_log.config(state=tk.DISABLED)
         user_input.unbind("<Return>")
 
     user_input.bind("<Return>", handle_user_input)
+
 
 def choose_movie_with_most_seats(movies_info):
     max_seats = 0
     movie_with_most_seats = None
 
     for movie in movies_info:
-        if movie['seats'] > max_seats:
-            max_seats = movie['seats']
+        if movie["seats"] > max_seats:
+            max_seats = movie["seats"]
             movie_with_most_seats = movie
 
-    return movie_with_most_seats['title'] if movie_with_most_seats else None
+    return movie_with_most_seats["title"] if movie_with_most_seats else None
+
 
 def show_help_message():
     chat_log.config(state=tk.NORMAL)
     chat_log.insert(tk.END, "Bot: Quer ajuda para escolher um filme? (Sim/Não)\n")
     chat_log.config(state=tk.DISABLED)
+
 
 def send_message(event=None):
     message = user_input.get()
@@ -384,16 +369,25 @@ def send_message(event=None):
         elif "sim" in message.lower():
             selected_movie = choose_movie_with_most_seats(movie_info)
             if selected_movie:
-                chat_log.insert(tk.END, f"Bot: Recomendo '{selected_movie}' que possui mais lugares disponíveis.\n")
+                chat_log.insert(
+                    tk.END,
+                    f"Bot: Recomendo '{selected_movie}' que possui mais lugares disponíveis.\n",
+                )
             else:
                 chat_log.insert(tk.END, "Bot: Não há filmes disponíveis no momento.\n")
         elif "nao" in message.lower():
-            chat_log.insert(tk.END, "Bot: Obrigado, aconselho a realizar a sua reserva antes que esgote.\n")
+            chat_log.insert(
+                tk.END,
+                "Bot: Obrigado, aconselho a realizar a sua reserva antes que esgote.\n",
+            )
         else:
-            chat_log.insert(tk.END, "Bot: Não entendi. Pode reformular a sua resposta?\n")
+            chat_log.insert(
+                tk.END, "Bot: Não entendi. Pode reformular a sua resposta?\n"
+            )
 
         chat_log.config(state=tk.DISABLED)
         user_input.delete(0, tk.END)
+
 
 root = tk.Tk()
 root.minsize(600, 500)
@@ -411,6 +405,30 @@ username_label.pack()
 
 movies_listbox = tk.Listbox(root, width=60, font=("Arial", 12))
 movies_listbox.pack()
+
+buttons_frame = tk.Frame(root)
+buttons_frame.pack()
+add_movie_button = tk.Button(
+    buttons_frame,
+    text="Adicionar Filme",
+    command=add_movie,
+    font=("Arial", 14),
+    fg="black",
+    padx=10,
+    pady=5,
+)
+add_movie_button.pack(side=tk.LEFT, padx=5)
+
+delete_movie_button = tk.Button(
+    buttons_frame,
+    text="Apagar Filme",
+    command=delete_movie,
+    font=("Arial", 14),
+    fg="black",
+    padx=10,
+    pady=5,
+)
+delete_movie_button.pack(side=tk.LEFT, padx=5)
 
 button_frame = tk.Frame(root)
 button_frame.pack()
