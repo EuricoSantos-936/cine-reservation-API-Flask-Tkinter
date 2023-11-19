@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from flask_login import current_user, login_required, login_user, logout_user
+from flask_login import  login_user
 from api.models import models
 from api.orm.data_orm import db
 
@@ -16,7 +16,7 @@ def create_user():
     if username and password:
         existing_user = models.User.query.filter_by(username=username).first()
         if existing_user:
-            return (
+            return (    
                 jsonify({"message": "O utilizador já existe"}),
                 409,
             )
@@ -59,21 +59,12 @@ def login():
 
     if user and user.check_password(password):
         login_user(user)
-        return jsonify({"message": "Login com sucesso"}), 200
+        return jsonify({"message": "Login com sucesso", "id":user.id}),200
     else:
         return (
             jsonify({"message": "Credenciais invalidas, password ou username incorretos"}),
             401,
         )
-
-
-# Rota para fazer logout
-@main_view.route("/logout")
-@login_required
-def logout():
-    logout_user()
-    return jsonify({"message": "Logout com sucesso."}), 200
-
 
 # Rota para ver todos os filmes
 @main_view.route("/movies", methods=["GET"])
@@ -83,7 +74,7 @@ def get_movies():
     if not movies:
         return jsonify({"message": "Nenhum filme disponível atualmente."}), 404
 
-    movie_list = [{"id": movie.id, "title": movie.title} for movie in movies]
+    movie_list = [{"id": movie.id, "Titulo": movie.title, "Descrição": movie.description, "Lugares":movie.seats, "Sala":movie.room  } for movie in movies]
     return jsonify(movie_list)
 
 
@@ -101,11 +92,11 @@ def get_movie(movie_id):
 
 # Rota para fazer uma reserva
 @main_view.route("/reservations", methods=["POST"])
-@login_required
+#@login_required
 def create_reservation():
     data = request.get_json()
     movie_id = data.get("movie_id")
-    user_id = current_user.get_id()
+    user_id = data.get("user_id")
 
     movie = models.Movie.query.get(movie_id)
     if not movie:
