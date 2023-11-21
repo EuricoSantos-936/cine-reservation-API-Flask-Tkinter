@@ -210,11 +210,8 @@ def reserve_movie():
             return
 
         movie_ids = get_movies()
-        # Verifique se o índice selecionado está dentro dos limites
         if selected_movie_index[0] < len(movie_ids):
-            # Obtenha o ID correto do filme
             movie_id = movie_ids[selected_movie_index[0]]["id"]
-            # Faça a reserva com o ID correto
             response = requests.post(
                 "http://localhost:8001/reservations",
                 json={"movie_id": movie_id, "user_id": user_id},
@@ -248,10 +245,10 @@ def get_movie_description():
 
     if selected_movie_index:
         movie_ids = get_movies()
+        
         if selected_movie_index[0] < len(movie_ids):
-            # Obtenha o filme correto usando o índice selecionado
             movie = movie_ids[selected_movie_index[0]]
-        # Mostrar informações do filme se existirem
+
         if "title" in movie and "description" in movie:
             messagebox.showinfo(
                 "Descrição do filme",
